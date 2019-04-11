@@ -41,6 +41,9 @@ tokens = [
 
 
 # Regular expressions rulers
+t_NUM_PONTO_FLUTUANTE = r'((\+|\-)?(\d+)(\.\d+)(e(\+|-)?(\d+))?|(\d+)e(\+|-)?(\d+))'
+t_NUM_INTEIRO = r'\d+'
+    
 t_E = r'&&'
 t_OU = r'\|'
 t_NAO = r'\!'
@@ -72,13 +75,14 @@ def t_ID(t):
     t.type = reserved.get(t.value, 'ID')
     return t
 
-t_NUM_PONTO_FLUTUANTE = r'((\d+)(\.\d+)(e(\+|-)?(\d+))?|(\d+)e(\+|-)?(\d+))'
-t_NUM_INTEIRO = r'\d+'
 
 
 
 def t_COMENTARIO(t):
-    r'{[^}]*}'
+    r'{[^(})]*}'
+    lineCount = re.findall('\n', t.value)
+    t.lexer.lineno += len(lineCount)
+
 
 # New lines will be counted
 def t_newline(t):
@@ -99,6 +103,7 @@ symbols_list = []
 symbol = {}
 all_tokens = []
 my_token = {}
+string_buffer = []
 
 if __name__ == '__main__':
     import sys
