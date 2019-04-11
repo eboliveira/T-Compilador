@@ -1,4 +1,0 @@
-digraph {
-	teste [label=teste2]
-	"" [label="0 - root"]
-}

@@ -1,2 +1,3 @@
-flutuante : teste
-teste := 10.1
+inteiro principal ()
+    retorna (0)
+fim
