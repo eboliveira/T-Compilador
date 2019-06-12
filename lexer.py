@@ -1,6 +1,7 @@
-#-*- coding: UTF-8 -*-
+# -*- coding: UTF-8 -*-
 import ply.lex as lex
 from ply.lex import TOKEN
+import sys
 import re
 
 # Dictionary of reserved words
@@ -10,40 +11,40 @@ reserved = {
     'senão'.decode('utf-8'): 'SENAO',
     'fim': 'FIM',
     'leia': 'LEIA',
-    'escreva' : 'ESCREVA',
+    'escreva': 'ESCREVA',
     'retorna': 'RETORNA',
     'até'.decode('utf-8'): 'ATE',
     'flutuante': 'FLUTUANTE',
-    'inteiro' : 'INTEIRO',
+    'inteiro': 'INTEIRO',
     'repita': 'REPITA',
 }
 
 # List of token names
 tokens = [
-    #Logicals    
-    'E', 'OU', 'NAO',
+             # Logicals
+             'E', 'OU', 'NAO',
 
-    #Arithmeticals
-    'SOMA', 'SUBTRACAO', 'MULTIPLICACAO', 'DIVISAO',
+             # Arithmeticals
+             'SOMA', 'SUBTRACAO', 'MULTIPLICACAO', 'DIVISAO',
 
-    #Relationals
-    'MENOR_IGUAL', 'MAIOR_IGUAL', 'IGUAL', 'DIFERENTE', 'MENOR', 'MAIOR',
-    
-    #Types
-    'NUM_PONTO_FLUTUANTE', 'NUM_INTEIRO', 
+             # Relationals
+             'MENOR_IGUAL', 'MAIOR_IGUAL', 'IGUAL', 'DIFERENTE', 'MENOR', 'MAIOR',
 
-    #Symbols
-    'VIRGULA', 'ATRIBUICAO', 'ABRE_PARENTESES', 'FECHA_PARENTESES', 'ABRE_COLCHETE', 'FECHA_COLCHETE','ABRE_CHAVE', 'FECHA_CHAVE', 'DOIS_PONTOS',
+             # Types
+             'NUM_PONTO_FLUTUANTE', 'NUM_INTEIRO',
 
-    #Others 
-     'ID' , 'COMENTARIO'] + \
-    list(reserved.values())
+             # Symbols
+             'VIRGULA', 'ATRIBUICAO', 'ABRE_PARENTESES', 'FECHA_PARENTESES', 'ABRE_COLCHETE', 'FECHA_COLCHETE',
+             'ABRE_CHAVE', 'FECHA_CHAVE', 'DOIS_PONTOS',
 
+             # Others
+             'ID', 'COMENTARIO'] + \
+         list(reserved.values())
 
 # Regular expressions rulers
-t_NUM_PONTO_FLUTUANTE = r'((\+|\-)?(\d+)(\.\d+)(e(\+|-)?(\d+))?|(\d+)e(\+|-)?(\d+))'
+t_NUM_PONTO_FLUTUANTE = r'((\d+)(\.\d+)(e(\+|-)?(\d+))?|(\d+)e(\+|-)?(\d+))'
 t_NUM_INTEIRO = r'\d+'
-    
+
 t_E = r'&&'
 t_OU = r'\|'
 t_NAO = r'\!'
@@ -70,12 +71,11 @@ t_DIFERENTE = r'<>'
 t_MENOR = r'<'
 t_MAIOR = r'>'
 
+
 def t_ID(t):
     r'[A-Za-zÁ-Ñá-ñ_][\w_]*'
     t.type = reserved.get(t.value, 'ID')
     return t
-
-
 
 
 def t_COMENTARIO(t):
@@ -89,24 +89,23 @@ def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
+
 # Contains ignore characters as spaces and tabs
 t_ignore = ' \t'
 
+
 # Error handling rule
 def t_error(t):
-    print 'Illegal character: %s' % t.value[0]
-    t.lexer.skip(1)
+    raise Exception("Caracter ilegal '{}' (linha {})".format(t.value[0], t.lineno))
+
 
 lexer = lex.lex(optimize=0, reflags=re.UNICODE)
 
-symbols_list = []
-symbol = {}
-all_tokens = []
-my_token = {}
-string_buffer = []
-
 if __name__ == '__main__':
-    import sys
+    symbols_list = []
+    symbol = {}
+    all_tokens = []
+    my_token = {}
     code = open(sys.argv[1])
     code_text = code.read()
     lex.input(code_text.decode('utf-8'))
@@ -114,27 +113,9 @@ if __name__ == '__main__':
         tok = lex.token()
         if not tok:
             break
-        if(tok.type == 'ID'):
-            symbol['linha'] = tok.lineno
-            symbol['tipo'] = 'definir'
-            symbol['lexema'] = tok.value
-            symbol['valor'] = "None"
-            symbol = {}
-            symbols_list.append(symbol)
         my_token['Tipo'] = tok.type
         my_token['Linha'] = tok.lineno
         my_token['Valor'] = tok.value
         all_tokens.append(my_token)
-        my_token = {}
-
-
-
-for item in all_tokens:
-    print('Tipo = ' + str(item['Tipo']) + ' | Linha = ' + str(item['Linha']) + ' | Valor = ' + item['Valor'])
-
-
-
-
-
-        
-        
+        print my_token
+    my_token = {}

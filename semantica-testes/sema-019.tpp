@@ -6,7 +6,7 @@ flutuante: x, y, z
 inteiro fatorial(inteiro: n, flutuante: m)
 	{NOTAÇÃO CIENTÍFICA}
 	{WARNING: 'm' ESTÁ RECEBENDO VALORES DE TIPOS DIFERENTES}
-	m := 5.0
+	m := 5
 	
 	se n>0 então
 		retorna(n)
@@ -17,16 +17,15 @@ inteiro fatorial(inteiro: n, flutuante: m)
 	fim
 	
 	z := 1.9 {SEM ERRO, FOI INICIALIZADO}
-	z := z+1.0 {ERRO, ID NAO FOI INICIALIZADO}
+	z := z+1 {ERRO, ID NAO FOI INICIALIZADO}
 
 	{WARNING DE RETORNO: PASSANDO TIPO DIFERENTE}
-	retorna(10)
+	retorna(m)
 fim
 
 inteiro principal()
 	leia(n)
 	escreva(fatorial(1, 1.0)) {TIPOS DOS PARAMETROS DIFERENTES, TESTAR E VER SE ACUSA UM WARNING}
-	retorna(10)
 fim
 
 {VERIFICAR SE A VARIÁVEL 'a' ESTÁ NO ESCOPO 'global'}
@@ -44,16 +43,15 @@ inteiro fatorial2(inteiro: fat, flutuante: fat2, inteiro: fat3)
 	
 
 	{CHAMADA DE FUNÇÃO UMA DENTRO DA OUTRA!}
-	fatorial(1.0, 1.0)
+	escreva(fatorial(fatorial(1, 1.0), 1.0))
 
 	a := fatorial(1, 1.0)
 
 	{WARNING: VARIÁVEL 'b' é 'flutuante' E A FUNÇÃO È 'inteiro'}
-	b := 1.0
+	b := fatorial(1, 1.0)
 
 	{CHAMADA DE FUNÇÃO NORMAL}
 	fatorial(1, 1.0)
-	retorna(10)
 fim
 
 {WARNING}
