@@ -48,7 +48,6 @@ if __name__ == '__main__':
             elif get_name(node.parent) == 'SE':
                 verify_unused_vars(scope.get_actual_scope()['variables'])
             scp = scope.scopes.pop()
-            print scp
 
         elif node_name == 'ATE':
             verify_unused_vars(scope.get_actual_scope()['variables'])
@@ -182,11 +181,3 @@ if __name__ == '__main__':
     verify_haves_main(functions)
     verify_unused_functions(functions)
     verify_unused_vars(scope.scopes[0].get('variables'))
-    print scope.scopes[0]
-    for func in functions:
-        print '\n' + "Nome da funcao: " +  func.name
-        print "Tipo da funcao: " + func.type
-        print("Lista de parametros da funcao: ") +  str(func.param_list)
-        print "Se a funcao possui retorno: " +  str(func.has_return)
-        print "Linha de declaracao da funcao: " +  str(func.line)
-        print "Se a funcao foi usada: " +  str(func.used)

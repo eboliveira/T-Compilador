@@ -210,7 +210,9 @@ def count_arguments(argument_list_node):
 def check_type_arguments(argument_list_node, param_list, functions_list):
     node_walk = argument_list_node
     i = len(param_list) - 1
-    while get_name(node_walk) != 'numero':
+    if get_name(node_walk.children[0]) == 'vazio':
+        return
+    while get_name(node_walk) != 'numero' and get_name(node_walk) != 'vazio':
         print node_walk
         if get_name(node_walk) == 'chamada_funcao':
             fun_name = get_last_value_name(node_walk.children[0])
